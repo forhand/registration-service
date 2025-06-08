@@ -1,0 +1,45 @@
+spring:
+  # Datasource configuration
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  
+  # JPA configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
+  # Disable Liquibase for tests
+  liquibase:
+    enabled: false
+  
+  # Main configuration
+  main:
+    allow-bean-definition-overriding: true
+  
+  # Messages configuration
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+    use-code-as-default-message: false
+
+# Logging configuration
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.example.registration_service: DEBUG
+
+# H2 Console (optional, for debugging)
+h2:
+  console:
+    enabled: true
+    path: /h2-console 
