@@ -2,6 +2,9 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.0"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("checkstyle")
+	id("com.github.spotbugs") version "6.0.7"
+	jacoco
 }
 
 group = "com.example"
@@ -49,4 +52,46 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = "0.8".toBigDecimal()
+			}
+		}
+	}
+}
+
+checkstyle {
+	toolVersion = "10.12.7"
+	configFile = file("config/checkstyle/checkstyle.xml")
+	maxWarnings = 0
+}
+
+spotbugs {
+	toolVersion = "4.8.3"
+	ignoreFailures = false
+}
+
+tasks.spotbugsMain {
+	reports {
+		create("html") {
+			required = true
+		}
+	}
+}
+
+tasks.check {
+	dependsOn(tasks.jacocoTestCoverageVerification)
 }
